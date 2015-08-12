@@ -1,0 +1,17 @@
+{
+  "name": "gene",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "node test/runner.js"
+  },
+  "author": "Dana Ward <acheron0@yahoo.com>",
+  "license": "ISC",
+  "dependencies": {
+    "domready": "^1.0.8",
+    "lodash-node": "^3.10.0",
+    "nodeunit": "^0.9.1",
+    "randgen": "^0.1.0"
+  }
+}

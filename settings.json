@@ -1,0 +1,6 @@
+{
+	"maxValue" : 10,
+	"mutationRate" : 0.45,
+	"traitTypes" : ["Intelligence", "Size", "Prowess", "Nutrition", "Fertility", "Longevity", "Speed"],
+	"dimensions" : { "width" : 50, "length" : 50 }
+}
