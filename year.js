@@ -5,10 +5,10 @@ var Year = function(environment) {
 }
 
 Year.prototype.executeYear = function () {
-	var creatures = this.environment.getAllCreatures();
+	var creatures = this.environment.getAllCreatures(), environment = this.environment;
 	
-	var lifecycles = _.invoke(creatures, function(creature) {
-		creature.beginYear();
+	var lifecycles = _.map(creatures, function(creature) {
+		return creature.data.beginYear(environment);
 	});
 	
 	this.eat(lifecycles);
@@ -22,17 +22,17 @@ Year.prototype.executeYear = function () {
 // creatures find their food, and then battle to eat it
 Year.prototype.eat = function(lifecycles) {
 	
-	_(lifecycles).forEach(function(lifecycle) {
+	_.forEach(lifecycles, function(lifecycle) {
 		lifecycle.migrate();
 	});
 	
-	_(lifecycles).forEach(function(lifecycle) {
+	_.forEach(lifecycles, function(lifecycle) {
 		lifecycle.findFood();
 	});
 	
 	var allPrey = _.shuffle(this.environment.getAllPrey());
 	
-	_(allPrey).forEach(function(prey) {
+	_.forEach(allPrey, function(prey) {
 		prey.surviveYear();
 	});
 }
@@ -53,3 +53,5 @@ Year.prototype.breed = function(lifecycles) {
 		courtship.procreate();
 	});
 }
+
+module.exports = Year;

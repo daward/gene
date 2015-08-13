@@ -6,7 +6,7 @@ var Lifecycle = function(creature, environment) {
 // find all females within the male's range (a function of speed) and attempt to mate with them
 Lifecycle.prototype.findMates = function() {
 	if(this.creature.sex === 0) {
-		var courtships = Environment.findCourtships(this.creature);
+		var courtships = this.environment.findCourtships(this.creature);
 
 		_(courtships).forEach(function(courtship) {
 			courtship.court(this.creature);
@@ -22,11 +22,11 @@ Lifecycle.prototype.createCourtship = function() {
 
 Lifecycle.prototype.findFood = function() {
 	// returns an array of creatures in the area
-	var prey = Environment.stalkPrey(this.creature);
+	var prey = this.environment.stalkPrey(this.creature);
 }
 
 Lifecycle.prototype.migrate = function() {
-	Environment.migrate(this.creature.id, this.creature.range());
+	this.environment.migrate(this.creature);
 }
 
 Lifecycle.prototype.surviveWinter = function () {
@@ -37,3 +37,5 @@ Lifecycle.prototype.surviveWinter = function () {
 		this.creature.die();
 	}
 }
+
+module.exports = Lifecycle;

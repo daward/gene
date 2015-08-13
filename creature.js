@@ -4,6 +4,7 @@ var _ = require('lodash-node');
 var rand = require('randgen');
 var Trait = require('./trait.js');
 var Allele = require('./allele.js');
+var Lifecycle = require('./lifecycle.js');
 
 // Traits
 // ------------
@@ -71,9 +72,9 @@ var Creature = function(sex, alleleValues, ancestry) {
 
 // ACTIONS
 
-Creature.prototype.beginYear = function() {
+Creature.prototype.beginYear = function(environment) {
 	this.age++;
-	return new Lifecycle(this);
+	return new Lifecycle(this, environment);
 }
 
 Creature.prototype.eat = function(food) {
@@ -99,7 +100,7 @@ Creature.prototype.isDead = function () {
 }
 
 Creature.prototype.canEat = function(food) {
-	
+	var creature = this;
 	// to eat... 
 	// first off, you're not harry carry as a hot dog, so don't eat yourself
 	// the creature must be higher in the food chain (predationScore)
@@ -108,7 +109,7 @@ Creature.prototype.canEat = function(food) {
 	return  food.id != this.id &&
 			this.predationScore() > food.predationScore() && 
 			!food.canMate(this) &&
-			_.some(food.nutritionRange(), function(value) { _.inRange(value, this.nutritionRange()) });
+			_.some(food.nutritionRange(), function(value) { _.inRange(value, creature.nutritionRange()) });
 }
 
 Creature.prototype.canMate = function(creature) {

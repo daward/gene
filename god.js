@@ -4,6 +4,7 @@ var Creature = require('./creature.js');
 var _ = require('lodash-node');
 var uuid = require('./uuid.js');
 var settings = require('./settings.json');
+var Year = require('./year.js');
 
 // sweet, I get to write a god class and not feel guilty!
 var God = function () {
@@ -22,6 +23,11 @@ God.prototype.letThereBePlants = function() {
 			this.environment.plant(vegetation, x, y);
 		}
 	}
+}
+
+God.prototype.observeTheWorldIHaveCreated = function () {
+	var year = new Year(this.environment);
+	year.executeYear();
 }
 
 God.prototype.createTheWorld = function() {

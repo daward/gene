@@ -1,4 +1,4 @@
-
+var $ = require('jQuery');
 var domready = require("domready");
 var _ = require('lodash-node');
 domready(function () {
@@ -11,17 +11,27 @@ domready(function () {
 	var bw = gridSize * settings.dimensions.width;
 	var bh = gridSize * settings.dimensions.length;
 	var p = 10;
+	
+	function initialize() {
+		var context = $("#canvas")[0].getContext("2d");
+		context.font = "12px Georgia";
+		
+		$("#year").click(function() {
+			shiva.observeTheWorldIHaveCreated();
+			drawBoard();
+		});
+		
+		drawBoard();
+	}
 
 	function drawBoard(){
-		var canvas = document.getElementById("canvas");
-		var context = canvas.getContext("2d");
-		context.font = "12px Georgia";
-
+		var context = $("#canvas")[0].getContext("2d");
+		context.clearRect(0, 0, $("#canvas")[0].width, $("#canvas")[0].height);
+		
 		for (var x = 0; x <= bw; x += gridSize) {
 			context.moveTo(0.5 + x + p, p);
 			context.lineTo(0.5 + x + p, bh + p);
 		}
-
 
 		for (var x = 0; x <= bh; x += gridSize) {
 			context.moveTo(p, 0.5 + x + p);
@@ -37,11 +47,11 @@ domready(function () {
 		_.forEach(shiva.environment.getAllCreatures(), function(creature) {
 			context.fillText("C", p + creature.x * gridSize + 20, p + creature.y * gridSize + 25);
 		});
-
+		
 		context.strokeStyle = "black";
-		context.stroke();
+		context.stroke();		
 	}
 
-	drawBoard();
+	initialize();
 
 });

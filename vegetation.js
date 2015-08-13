@@ -40,4 +40,9 @@ Vegetation.prototype.surviveYear = function() {
 	this.grow();
 }
 
+Vegetation.prototype.nutritionRange = function() {
+	return [this.nutrition, this.nutrition];
+}
+
+
 module.exports = Vegetation;
