@@ -1,16 +1,14 @@
 {
   "name": "gene-sim",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "",
-  "main": "index.js",
+  "main": "gene.js",
   "scripts": {
     "test": "node test/runner.js"
   },
   "author": "Dana Ward <acheron0@yahoo.com>",
   "license": "ISC",
   "dependencies": {
-    "domready": "^1.0.8",
-    "jquery": "^2.1.4",
     "lodash-node": "^3.10.0",
     "nodeunit": "^0.9.1",
     "randgen": "^0.1.0"
