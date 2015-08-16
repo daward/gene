@@ -35,17 +35,19 @@ Courtship.prototype.fertilize = function(male) {
 
 Courtship.prototype.procreate = function() {
 	
-	var litterSize = this.female.litterSize();
-	var courtier = this.selectCourtier()
-	var retVal = [];
-	
-	for(var i = 0; i < litterSize; i++) {
-		var offspring = this.fertilize(courtier);
-		retVal.push(offspring);
-		this.environment.birth(offspring, this.female);
+	if(this.courtiers.length > 0) {
+		var litterSize = this.female.litterSize();
+		var courtier = this.selectCourtier()
+		var retVal = [];
+		
+		for(var i = 0; i < litterSize; i++) {
+			var offspring = this.fertilize(courtier);
+			retVal.push(offspring);
+			this.environment.birth(offspring, this.female);
+		}
+		
+		return retVal;
 	}
-	
-	return retVal;
 }
 
 Courtship.prototype.createAncestry = function(male) {
