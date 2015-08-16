@@ -85,5 +85,4 @@ Courtship.prototype.court = function(male) {
 		this.courtiers.push(male);
 	}
 }
-
-module.exports = Courtship;
+ module.exports = Courtship;

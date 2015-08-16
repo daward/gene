@@ -56,7 +56,7 @@ God.prototype.letThereBeCreatures = function() {
 	
 	for(var i = 0; i < creatures.length; i++) {
 		this.environment.creatureMap.add(creatures[i].id, creatures[i], x, y)
-	}
+	}	
 }
 
 God.prototype.letThereBeAGenome = function() {

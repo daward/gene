@@ -1,5 +1,6 @@
 var settings = require('./settings.json');
 var EnvironmentMap = require('./environmentmap.js');
+var Courtship = require('./courtship.js');
 var Prey = require('./prey.js');
 var _ = require('lodash-node');
 
@@ -20,9 +21,10 @@ Environment.prototype.getAllCourtships = function() {
 	return this.courtshipMap.list();
 }
 
-Environment.prototype.displayCourtship = function(courtship) {
-	var location = this.creatureMap.locate(courtship.female.id);
-	this.courtshipMap.rangeAdd(courtship.female.id, courtship, location.x, location.y, courtship.female.breedingRange());
+Environment.prototype.displayCourtship = function(female) {
+	var courtship = new Courtship(female, this);
+	var location = this.creatureMap.locate(female.id);
+	this.courtshipMap.rangeAdd(female.id, courtship, location.x, location.y, female.breedingRange());
 }
 
 // CREATURES

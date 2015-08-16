@@ -40,17 +40,17 @@ Year.prototype.eat = function(lifecycles) {
 Year.prototype.breed = function(lifecycles) {
 	// now the mating phase
 	// first females indicate their willingness to be courted
-	_(lifecycles).forEach(function(lifecycle) {
+	_.forEach(lifecycles, function(lifecycle) {
 		lifecycle.createCourtship();
 	});
 	
 	// then males find the females
-	_(lifecycles).forEach(function(lifecycle) {
+	_.forEach(lifecycles, function(lifecycle) {
 		lifecycle.findMates();
 	});	
 	
-	_(this.environment.getAllCourtships()).forEach(function (courtship) {
-		courtship.procreate();
+	_.forEach(this.environment.getAllCourtships(), function (courtship) {
+		courtship.data.procreate();
 	});
 }
 

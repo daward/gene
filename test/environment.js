@@ -112,7 +112,7 @@ exports['test courting display'] = function (test) {
 		
 	female.breedingRange = function() { return 10;};
 	
-	env.displayCourtship(new Courtship(female, env));
+	env.displayCourtship(female);
 	
 	test.equals(1, env.getAllCourtships().length);
 	test.done();
@@ -127,7 +127,7 @@ exports['test finding courtships'] = function (test) {
 	female.breedingRange = function() { return 10;};
 	male.breedingRange = function() { return 0; };
 	
-	env.displayCourtship(new Courtship(female, env));
+	env.displayCourtship(female);
 	var courtships = env.findCourtships(male);
 	
 	test.equals(1, courtships.length);

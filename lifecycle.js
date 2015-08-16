@@ -1,3 +1,6 @@
+
+var _ = require('lodash-node');
+
 var Lifecycle = function(creature, environment) {
 	this.creature = creature;
 	this.environment = environment;
@@ -5,18 +8,17 @@ var Lifecycle = function(creature, environment) {
 
 // find all females within the male's range (a function of speed) and attempt to mate with them
 Lifecycle.prototype.findMates = function() {
-	if(this.creature.sex === 0) {
-		var courtships = this.environment.findCourtships(this.creature);
-
-		_(courtships).forEach(function(courtship) {
-			courtship.court(this.creature);
+	var creature = this.creature;
+	if(creature.sex === 0) {
+		_.forEach(this.environment.findCourtships(creature), function(courtship) {
+			courtship.data.court(creature);
 		})
 	}
 }
 
 Lifecycle.prototype.createCourtship = function() {
 	if(this.creature.sex === 1 && this.creature.isFertile()) {
-		this.environment.displayCourtship(new Courtship(this, this.environment));
+		this.environment.displayCourtship(this.creature);
 	}
 }
 
