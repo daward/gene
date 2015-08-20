@@ -26,7 +26,14 @@ God.prototype.letThereBePlants = function() {
 }
 
 God.prototype.observeTheWorldIHaveCreated = function () {
-	var year = new Year(this.environment);
+	var creatures = this.environment.getAllCreatures(), environment = this.environment;
+	
+	var lifecycles = _.map(creatures, function(creature) {
+		return creature.data.beginYear(environment);
+	});
+	
+	var year = new Year(lifecycles, function() { return environment.getFood() }) 
+		
 	year.executeYear();
 }
 
@@ -47,11 +54,11 @@ God.prototype.letThereBeCreatures = function() {
 		y = _.random(0, settings.dimensions.length - 1),
 		quant = _.random(0, 8);
 		
-	creatures.push(new Creature(0, genome, [godId]));
-	creatures.push(new Creature(1, genome, [godId]));
+	creatures.push(new Creature(0, genome, [ {"generation" : 0, "id" :godId} ]));
+	creatures.push(new Creature(1, genome, [{"generation" : 0, "id" :godId} ]));
 	
 	for(var i = 0; i < quant; i++) {
-		creatures.push(new Creature(_.random(0, 1), genome, [godId]));
+		creatures.push(new Creature(_.random(0, 1), genome, [{"generation" : 0, "id" :godId} ]));
 	}
 	
 	for(var i = 0; i < creatures.length; i++) {

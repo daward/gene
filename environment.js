@@ -25,11 +25,14 @@ Environment.prototype.displayCourtship = function(female) {
 	var courtship = new Courtship(female, this);
 	var location = this.creatureMap.locate(female.id);
 	this.courtshipMap.rangeAdd(female.id, courtship, location.x, location.y, female.breedingRange());
+	
+	return courtship;
 }
 
 // CREATURES
 Environment.prototype.decay = function(creature) {
 	this.creatureMap.remove(creature.id);
+	creature.dead = true;
 }
 
 Environment.prototype.birth = function(offspring, mother) {
@@ -60,16 +63,23 @@ Environment.prototype.getAllPrey = function () {
 	return this.preyMap.list();
 }
 
+Environment.prototype.getFood = function() {
+	var food = this.getAllPrey();
+	food = food.concat(this.vegetationMap.list());
+	return _.shuffle(food) 
+}
+
 Environment.prototype.stalkPrey = function(predator) {
 	var range = predator.range(),
 		preyMap = this.preyMap,
 		location = this.creatureMap.locate(predator.id),
 		creatureMap = this.creatureMap,
+		environment = this,
 		preyFunc = function(creature) {
 			var prey = preyMap.positions[creature.id];
 			
 			if(!prey) {
-				prey = new Prey(creature);
+				prey = new Prey(creature, environment);
 				var location = creatureMap.locate(creature.id);
 				preyMap.add(creature.id, prey, location.x, location.y);
 			} 

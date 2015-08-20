@@ -18,13 +18,19 @@ Lifecycle.prototype.findMates = function() {
 
 Lifecycle.prototype.createCourtship = function() {
 	if(this.creature.sex === 1 && this.creature.isFertile()) {
-		this.environment.displayCourtship(this.creature);
+		this.courtship = this.environment.displayCourtship(this.creature);
+	}
+}
+
+Lifecycle.prototype.procreate = function() {
+	if(this.courtship) {
+		this.courtship.procreate();
 	}
 }
 
 Lifecycle.prototype.findFood = function() {
 	// returns an array of creatures in the area
-	var prey = this.environment.stalkPrey(this.creature);
+	this.environment.stalkPrey(this.creature);
 }
 
 Lifecycle.prototype.migrate = function() {
@@ -36,7 +42,7 @@ Lifecycle.prototype.surviveWinter = function () {
 	
 	// if the creature is out of energy or is too old, it dies
 	if((this.creature.age > this.naturalDeathAge) || this.creature.energy <= 0) { 
-		this.creature.die();
+		this.environment.decay(this.creature);
 	}
 }
 

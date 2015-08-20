@@ -1,57 +1,53 @@
 var _ = require('lodash-node');
 
-var Year = function(environment) {
-	this.environment = environment;
+var Year = function(lifecycles, getPrey) {
+	this.lifecycles = lifecycles;
+	this.getPrey = getPrey;
 }
 
 Year.prototype.executeYear = function () {
-	var creatures = this.environment.getAllCreatures(), environment = this.environment;
 	
-	var lifecycles = _.map(creatures, function(creature) {
-		return creature.data.beginYear(environment);
+	_.forEach(this.lifecycles, function(lifecycle) {
+		lifecycle.migrate();
 	});
 	
-	this.eat(lifecycles);
-	this.breed(lifecycles);
+	this.eat();
+	this.breed();
 	
-	_(lifecycles).forEach(function(lifecycle) {
+	_.forEach(this.lifecycles, function(lifecycle) {
 		lifecycle.surviveWinter();
 	});
 }
 
 // creatures find their food, and then battle to eat it
-Year.prototype.eat = function(lifecycles) {
-	
-	_.forEach(lifecycles, function(lifecycle) {
-		lifecycle.migrate();
-	});
-	
-	_.forEach(lifecycles, function(lifecycle) {
+Year.prototype.eat = function() {
+		
+	_.forEach(this.lifecycles, function(lifecycle) {
 		lifecycle.findFood();
 	});
 	
-	var allPrey = _.shuffle(this.environment.getAllPrey());
-	
-	_.forEach(allPrey, function(prey) {
-		prey.surviveYear();
+	_.forEach(this.getPrey(), function(prey) {
+		prey.data.surviveYear();
 	});
 }
 
-Year.prototype.breed = function(lifecycles) {
+Year.prototype.breed = function() {
 	// now the mating phase
 	// first females indicate their willingness to be courted
-	_.forEach(lifecycles, function(lifecycle) {
+	_.forEach(this.lifecycles, function(lifecycle) {
 		lifecycle.createCourtship();
 	});
 	
 	// then males find the females
-	_.forEach(lifecycles, function(lifecycle) {
+	_.forEach(this.lifecycles, function(lifecycle) {
 		lifecycle.findMates();
-	});	
-	
-	_.forEach(this.environment.getAllCourtships(), function (courtship) {
-		courtship.data.procreate();
 	});
+
+	// then the females give birth (this should probably happen in the spring, but this is simpler
+	_.forEach(this.lifecycles, function (lifecycle) {
+		lifecycle.procreate();
+	});
+		
 }
 
 module.exports = Year;

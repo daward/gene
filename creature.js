@@ -54,7 +54,7 @@ var Lifecycle = require('./lifecycle.js');
 // Limitation: Speed cannot exceed size
 
 
-var Creature = function(sex, alleleValues, ancestry) {
+var Creature = function(sex, alleleValues, ancestry, startingEnergy) {
 	
 	this.traits = _.mapValues(alleleValues, function(alleleValue) { 
 		return new Trait(_.mapValues(alleleValue, function(value) {
@@ -64,7 +64,7 @@ var Creature = function(sex, alleleValues, ancestry) {
 	this.sex = sex;
 	this.id = uuid();
 	this.ancestry = ancestry;
-	this.energy = settings.startingEnergy;
+	this.energy = startingEnergy;
 	this.age = 0;
 	this.naturalDeathAge = Math.round(rand.rnorm(this.expectedLifespan(), Math.round(this.expectedLifespan() * .3)));
 	this.dead = false;
@@ -79,12 +79,51 @@ Creature.prototype.beginYear = function(environment) {
 
 Creature.prototype.eat = function(food) {
 	this.energy = this.energy + food.energyValue();
+	food.die();	
 }
 
-Creature.prototype.die = function() {
-	Environment.decay(this.id);
-	this.dead = true;
+Creature.prototype.fertilize = function(male, energy) {
+	
+	var zygote = {};
+	var maleChromosome = Math.floor(Math.random() * 2);
+	var femaleChromosome = Math.floor(Math.random() * 2);
+	var female = this;
+	
+	_.forEach(settings.traitTypes, function(traitType) {
+		if(female.traits[traitType] && male.traits[traitType]) {
+			var alleles = [
+				female.traits[traitType].reproduce(femaleChromosome),
+				male.traits[traitType].reproduce(maleChromosome)
+			]
+			zygote[traitType] = alleles;
+		}
+	});
+	
+	return new Creature(maleChromosome, zygote, this.createAncestry(male), energy);
 }
+
+Creature.prototype.createAncestry = function (male) {
+	var ancestry = []
+	ancestry.concat(male.ancestry);
+	ancestry.concat(this.ancestry);
+	
+	// prune off the oldest possible ancestor to allow for speciation
+	_.remove(ancestry, function(ancestor) {
+		return ancestor.generation > settings.oldestGeneration;
+	});
+	
+	// add a generation to the family tree
+	ancestry = _(ancestry).forEach(function(ancestor) {
+		ancestor.generation++;
+	});
+	
+	// tack on the mother and father
+	ancestry.push({"generation" : 0, "id" : this.id})
+	ancestry.push({"generation" : 0, "id" : male.id})
+	
+	return ancestry;
+}
+
 
 // STATE
 Creature.prototype.isFertile = function () {
@@ -96,7 +135,7 @@ Creature.prototype.isFull = function () {
 }
 
 Creature.prototype.isDead = function () {
-	return this.dead;
+	return this.dead;	
 }
 
 Creature.prototype.canEat = function(food) {
@@ -109,7 +148,7 @@ Creature.prototype.canEat = function(food) {
 	return  food.id != this.id &&
 			this.predationScore() > food.predationScore() && 
 			!food.canMate(this) &&
-			_.some(food.nutritionRange(), function(value) { _.inRange(value, creature.nutritionRange()) });
+			_.some(food.nutritionRange(), function(value) { return _.inRange(value, creature.nutritionRange()[0], creature.nutritionRange()[1] + 1) });
 }
 
 Creature.prototype.canMate = function(creature) {

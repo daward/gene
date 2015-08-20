@@ -1,8 +1,9 @@
 var _ = require('lodash-node');
 
-var Prey = function(creature) {
+var Prey = function(creature, environment) {
 	this.creature = creature;
 	this.predators = [];
+	this.environment = environment;
 }
 
 Prey.prototype.stalkedBy = function(creature) {
@@ -14,23 +15,34 @@ Prey.prototype.surviveYear = function() {
 	var i = 0;
 	var survived = true;
 	while(i < this.predators.length && survived) {
-		i = (survived = this.survive(this.predator[i])) ? i + 1 : i;
+		survived = this.survive(this.predators[i]);
+		if(survived) {
+			i = i + 1;
+		}
 	}
 	
 	if(!survived) {
-		predators[i].eat(this.creature);
+		this.predators[i].eat(this);
 	}	
 }
 
 Prey.prototype.survive = function(predator) {
-	if(predator.full() || predator.dead()) {
+	if(predator.isFull() || predator.isDead()) {
 		return true;
 	}
 	
 	var differential = (predator.predationScore() - this.creature.predationScore()) / predator.predationScore();
 
-	// a high differential decreases the chances of survival
-	return  differential > Math.random();
+	// a low differential decreases the chances of survival
+	return  differential < Math.random();
+}
+
+Prey.prototype.energyValue = function () {
+	return this.creature.energyValue();
+}
+
+Prey.prototype.die = function () {
+	this.environment.decay(this.creature);
 }
 
 module.exports = Prey;

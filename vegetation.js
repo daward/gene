@@ -1,9 +1,10 @@
 var uuid = require('./uuid.js');
+var _ = require('lodash-node');
 
 var Vegetation = function(growthRate, nutrition, energyValue, size) {
 	this.growthRate = growthRate;
 	this.nutrition = nutrition;
-	this.energyValue = energyValue;
+	this.energyProvided = energyValue;
 	this.size = size;
 	this.predators = [];
 	this.id = uuid();
@@ -14,11 +15,11 @@ Vegetation.prototype.grow = function() {
 }
 
 Vegetation.prototype.energyValue = function () {
-	return this.energyValue;
+	return this.energyProvided;
 }
 
 Vegetation.prototype.predationScore = function () {
-	return 0;
+	return -1;
 }
 
 Vegetation.prototype.canMate = function(creature) {
@@ -31,13 +32,17 @@ Vegetation.prototype.stalkedBy = function(creature) {
 
 Vegetation.prototype.surviveYear = function() {
 	var food = this, 
-		hungryPredators = _.filter(this.predators, function(predator) { return !predator.full() });
+		hungryPredators = _.filter(this.predators, function(predator) { return !predator.isFull() });
 	
-	_.sample(hungryPredators, this.size).forEach(function(predator) { predator.eat(this) });
-	
-	this.size = Math.max(this.size - hungryPredators.length, 0);
+	_.sample(hungryPredators, this.size).forEach(function(predator) { predator.eat(food) });
 	
 	this.grow();
+}
+
+Vegetation.prototype.die = function () {
+	if(this.size > 1) {
+		this.size--;
+	}
 }
 
 Vegetation.prototype.nutritionRange = function() {
