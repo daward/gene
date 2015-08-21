@@ -29,3 +29,14 @@ exports['test same species can mate'] = function (test) {
 
 	test.done();
 };
+
+exports['test unqiues'] = function (test) {
+	var uniques = {}
+	
+	for(var i = 0; i < 1000; i++) {
+		var female = new Creature(1, {"Longevity" : [10, 5]}, [{"generation" : 0, "id" : "lsdjf"}]);
+		test.ok(!uniques[female.id])
+		uniques[female.id] = female;
+	}
+	test.done();
+};

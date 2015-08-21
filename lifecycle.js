@@ -9,7 +9,7 @@ var Lifecycle = function(creature, environment) {
 // find all females within the male's range (a function of speed) and attempt to mate with them
 Lifecycle.prototype.findMates = function() {
 	var creature = this.creature;
-	if(creature.sex === 0) {
+	if(creature.sex === 0 && !creature.dead) {
 		_.forEach(this.environment.findCourtships(creature), function(courtship) {
 			courtship.data.court(creature);
 		})
@@ -17,7 +17,7 @@ Lifecycle.prototype.findMates = function() {
 }
 
 Lifecycle.prototype.createCourtship = function() {
-	if(this.creature.sex === 1 && this.creature.isFertile()) {
+	if(this.creature.sex === 1 && this.creature.isFertile() && !this.creature.dead) {
 		this.courtship = this.environment.displayCourtship(this.creature);
 	}
 }

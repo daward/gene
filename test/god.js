@@ -9,3 +9,10 @@ exports['test creation'] = function (test) {
 	shiva.createTheWorld();
 	test.done();
 };
+
+exports['test creation next year'] = function (test) {
+	var shiva = new God();
+	shiva.createTheWorld();
+	shiva.observeTheWorldIHaveCreated();
+	test.done();
+};
