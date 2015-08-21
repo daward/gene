@@ -34,7 +34,11 @@ Vegetation.prototype.surviveYear = function() {
 	var food = this, 
 		hungryPredators = _.filter(this.predators, function(predator) { return !predator.isFull() });
 	
-	_.sample(hungryPredators, this.size).forEach(function(predator) { predator.eat(food) });
+	if(hungryPredators.length) {
+		_.sample(hungryPredators, Math.floor(this.size)).forEach(function(predator) { 
+			predator.eat(food) 
+		});
+	}
 	
 	this.grow();
 }

@@ -16,3 +16,11 @@ exports['test creation next year'] = function (test) {
 	shiva.observeTheWorldIHaveCreated();
 	test.done();
 };
+
+exports['test creation two years'] = function (test) {
+	var shiva = new God();
+	shiva.createTheWorld();
+	shiva.observeTheWorldIHaveCreated();
+	shiva.observeTheWorldIHaveCreated();
+	test.done();
+};
