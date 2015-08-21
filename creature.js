@@ -64,6 +64,11 @@ var Creature = function(sex, alleleValues, ancestry, startingEnergy) {
 	this.sex = sex;
 	this.id = uuid();
 	this.ancestry = ancestry;
+	
+	if(!startingEnergy) {
+		throw "Can't birth a creature with no energy";
+	}
+	
 	this.energy = startingEnergy;
 	this.age = 0;
 	this.naturalDeathAge = Math.round(rand.rnorm(this.expectedLifespan(), Math.round(this.expectedLifespan() * .3)));

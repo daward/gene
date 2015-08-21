@@ -9,6 +9,7 @@ var Environment = function() {
 	this.courtshipMap = new EnvironmentMap(settings.dimensions);
 	this.preyMap = new EnvironmentMap(settings.dimensions);
 	this.vegetationMap = new EnvironmentMap(settings.dimensions);
+	this.deathReasons = {}
 }
 
 // MATING OVERLAY
@@ -30,7 +31,12 @@ Environment.prototype.displayCourtship = function(female) {
 }
 
 // CREATURES
-Environment.prototype.decay = function(creature) {
+Environment.prototype.decay = function(creature, reason) {
+		
+	if(reason) {
+		if(!this.deathReasons[reason]) { this.deathReasons[reason] = 0 };
+		this.deathReasons[reason]++;
+	}
 	this.creatureMap.remove(creature.id);
 	creature.dead = true;
 }

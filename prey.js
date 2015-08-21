@@ -12,18 +12,20 @@ Prey.prototype.stalkedBy = function(creature) {
 
 Prey.prototype.surviveYear = function() {
 	
-	var i = 0;
-	var survived = true;
-	while(i < this.predators.length && survived) {
-		survived = this.survive(this.predators[i]);
-		if(survived) {
-			i = i + 1;
+	if(!this.creature.isDead()) {
+		var i = 0;
+		var survived = true;
+		while(i < this.predators.length && survived) {
+			survived = this.survive(this.predators[i]);
+			if(survived) {
+				i = i + 1;
+			}
 		}
+		
+		if(!survived) {
+			this.predators[i].eat(this);
+		}	
 	}
-	
-	if(!survived) {
-		this.predators[i].eat(this);
-	}	
 }
 
 Prey.prototype.survive = function(predator) {
@@ -42,7 +44,7 @@ Prey.prototype.energyValue = function () {
 }
 
 Prey.prototype.die = function () {
-	this.environment.decay(this.creature);
+	this.environment.decay(this.creature, "eaten");
 }
 
 module.exports = Prey;

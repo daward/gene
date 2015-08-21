@@ -16,11 +16,12 @@ exports['test breed'] = function (test) {
 	{
 		_.forEach(creatures, function(creature) {
 			creature.fertilityAge = function () { return 0; }
+			creature.energy = 1000;
 		});
 		
 		year.breed();
 		
-		test.ok(2 < shiva.environment.getAllCreatures().length)
+		test.ok(2 < shiva.environment.getAllCreatures().length, "too few creatures! " + shiva.environment.getAllCreatures().length)
 		
 	})	
 	test.done();

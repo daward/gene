@@ -71,6 +71,11 @@ EnvironmentMap.prototype.list = function() {
 }
 
 EnvironmentMap.prototype.remove = function(id) {
+	
+	if(!this.positions[id]) {
+		console.trace("dead man!");
+	}
+	
 	this.makeInvisible(id);	
 	delete this.positions[id];
 }

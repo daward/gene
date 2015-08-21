@@ -11,7 +11,8 @@ Allele.prototype.replicate = function() {
 	
 	// mutate downward
 	if(mutationValue < .5 - settings.mutationRate) {
-		mutatedValue  = mutatedValue - 1;
+		// negative numbers just don't make sense
+		mutatedValue  = Math.max(0, mutatedValue - 1);
 	}
 	
 	// mutate upward

@@ -17,12 +17,17 @@ Courtship.prototype.procreate = function() {
 	
 	this.environment.courtshipMap.remove(this.female.id);
 	if(this.courtiers.length > 0) {
-		var litterSize = this.female.litterSize();
 		var courtier = this.selectCourtier()
 		var retVal = [];
+		var excessEnergy = this.female.energy - this.female.energyUsed();
+		
+		var litterSize = Math.min(this.female.litterSize(), excessEnergy)
+		var startingEnergy = Math.floor(excessEnergy / litterSize);
+		
+		this.female.energy = this.female.energy - (startingEnergy * litterSize)
 		
 		for(var i = 0; i < litterSize; i++) {
-			var offspring = this.female.fertilize(courtier);
+			var offspring = this.female.fertilize(courtier, startingEnergy);
 			retVal.push(offspring);
 			this.environment.birth(offspring, this.female);
 		}
