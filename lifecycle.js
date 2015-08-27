@@ -43,11 +43,9 @@ Lifecycle.prototype.surviveWinter = function () {
 		this.creature.energy = this.creature.energy - this.creature.energyUsed();
 		
 		// if the creature is out of energy or is too old, it dies
-		if((this.creature.age > this.naturalDeathAge)) { 
+		if((this.creature.age > this.creature.naturalDeathAge)) { 
 			this.environment.decay(this.creature, "old age");
-		}
-		
-		if(this.creature.energy <= 0) {
+		} else if (this.creature.energy <= 0) {
 			this.environment.decay(this.creature, "starvation");
 		}
 	}

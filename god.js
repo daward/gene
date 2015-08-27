@@ -16,9 +16,11 @@ God.prototype.letThereBePlants = function() {
 		for(var y = 0; y < settings.dimensions.length; y++) {
 			var vegetation = new Vegetation(
 				Math.random(),
+				_.random(.3, 1),
+				_.random(1, 5),
 				_.random(0, 10),
 				_.random(0, 10),
-				_.random(0, 10));
+				_.random(3, 6));
 				
 			this.environment.plant(vegetation, x, y);
 		}

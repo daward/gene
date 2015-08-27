@@ -1,17 +1,20 @@
 var uuid = require('./uuid.js');
 var _ = require('lodash-node');
 
-var Vegetation = function(growthRate, nutrition, energyValue, size) {
+var Vegetation = function(growthRate, minGrowth, nutrition, energyValue, size, maxSizeMultiplier) {
 	this.growthRate = growthRate;
 	this.nutrition = nutrition;
 	this.energyProvided = energyValue;
 	this.size = size;
 	this.predators = [];
 	this.id = uuid();
+	this.minGrowth = minGrowth;
+	this.maxSize = maxSizeMultiplier * size;
 }
 
 Vegetation.prototype.grow = function() {
-	this.size = this.size + Math.max(this.size * this.growthRate, 1);
+	
+	this.size = Math.min(this.maxSize, this.size + Math.max(this.size * this.growthRate, this.minGrowth));
 }
 
 Vegetation.prototype.energyValue = function () {
@@ -39,6 +42,8 @@ Vegetation.prototype.surviveYear = function() {
 			predator.eat(food) 
 		});
 	}
+	
+	this.predators = [];
 	
 	this.grow();
 }

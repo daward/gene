@@ -29,7 +29,7 @@ exports['test creation many years'] = function (test) {
 	var shiva = new God();
 	shiva.createTheWorld();
 	
-	for(var i = 0; i < 20; i++) {
+	for(var i = 0; i < 40; i++) {
 		shiva.observeTheWorldIHaveCreated();
 		console.log(shiva.environment.getAllCreatures().length);
 		console.log(shiva.environment.deathReasons);

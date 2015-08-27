@@ -166,4 +166,4 @@ exports['test wrap-around search'] = function (test) {
 	
 	test.equal(1, map.search("b", 1).length);
 	test.done();
-};
+};1111111

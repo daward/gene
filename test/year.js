@@ -194,7 +194,7 @@ function initializeHerbivoreWorld(num, callback) {
 		shiva.environment.creatureMap.add(creatures[i].id, creatures[i], 5, 5)
 	}
 	
-	var vegetation = new Vegetation(.5, 4, 10, 10)
+	var vegetation = new Vegetation(.5, 2, 4, 10, 10, 2)
 	// plant it right on top of the creature
 	shiva.environment.plant(vegetation, 5, 5);
 	

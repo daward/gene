@@ -42,7 +42,6 @@ exports['test procreation'] = function (test) {
 	var litter = courtship.procreate();
 	
 	test.equals(female.litterSize(), litter.length);
-	console.log(litter[0].traits.Longevity.alleles);
 	
 	test.done();
 }
