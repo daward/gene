@@ -61,7 +61,7 @@ God.prototype.letThereBeCreatures = function() {
 	creatures.push(new Creature(1, genome, [{"generation" : 0, "id" :godId} ], _.random(5, 10)));
 	
 	for(var i = 0; i < quant; i++) {
-		creatures.push(new Creature(_.random(0, 1), genome, [{"generation" : 0, "id" :godId} ], _.random(5, 10)));
+		creatures.push(new Creature(_.random(0, 1), genome, [{"generation" : 0, "id" :godId} ], _.random(5, 100)));
 	}
 	
 	for(var i = 0; i < creatures.length; i++) {
@@ -72,7 +72,7 @@ God.prototype.letThereBeCreatures = function() {
 God.prototype.letThereBeAGenome = function() {
 	var genome = [];
 	_.forEach(settings.traitTypes, function(traitType) {
-		var seed = _.random(0, 10)
+		var seed = _.random(2, 10)
 		genome[traitType] = [seed, _.random(seed - 1, seed + 1)];
 	});
 	return genome;

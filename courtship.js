@@ -21,15 +21,23 @@ Courtship.prototype.procreate = function() {
 		var retVal = [];
 		var excessEnergy = this.female.energy - this.female.energyUsed();
 		
-		var litterSize = Math.min(this.female.litterSize(), excessEnergy)
-		var startingEnergy = Math.floor(excessEnergy / litterSize);
+		if(excessEnergy > 0) {
+			var litterSize = Math.min(this.female.litterSize(), excessEnergy)
+			var startingEnergy = Math.floor(excessEnergy / litterSize);
 		
-		this.female.energy = this.female.energy - (startingEnergy * litterSize)
+			var newEnegy = this.female.energy - (startingEnergy * litterSize);
 		
-		for(var i = 0; i < litterSize; i++) {
-			var offspring = this.female.fertilize(courtier, startingEnergy);
-			retVal.push(offspring);
-			this.environment.birth(offspring, this.female);
+			if(!newEnegy) {
+				throw new "Dont kill the female"
+			}
+		
+			this.female.energy = newEnegy
+		
+			for(var i = 0; i < litterSize; i++) {
+				var offspring = this.female.fertilize(courtier, startingEnergy);
+				retVal.push(offspring);
+				this.environment.birth(offspring, this.female);
+			}
 		}
 		
 		return retVal;

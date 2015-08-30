@@ -69,7 +69,15 @@ var Creature = function(sex, alleleValues, ancestry, startingEnergy) {
 		throw "Can't birth a creature with no energy";
 	}
 	
-	this.energy = startingEnergy;
+	if(!this.maxEnergy()) {
+		throw "Invalid max energy";
+	}
+	
+	this.energy = Math.min(startingEnergy, this.maxEnergy());
+	if(!this.energy) {
+		throw "Invalid energy";
+	}
+	
 	this.age = 0;
 	this.naturalDeathAge = Math.round(rand.rnorm(this.expectedLifespan(), Math.round(this.expectedLifespan() * .3)));
 	this.dead = false;
@@ -83,7 +91,21 @@ Creature.prototype.beginYear = function(environment) {
 }
 
 Creature.prototype.eat = function(food) {
-	this.energy = this.energy + food.energyValue();
+	if(!this.energy) {
+		throw "Invalid energy";
+	}
+	
+	var newEnergy = Math.min(this.energy + food.energyValue(), this.maxEnergy());
+	if(!newEnergy) {
+		throw "Invalid energy";
+	}
+	
+	this.energy = newEnergy;
+	
+	if(!this.energy) {
+		throw "Invalid energy";
+	}
+	
 	food.die();	
 }
 
@@ -184,17 +206,17 @@ Creature.prototype.range = function() {
 // returns a value that is the combination of speed, intelligence, size and prowess
 // that determines how able one creature is to eat another 
 Creature.prototype.predationScore = function() {
-	return this.traits.Intelligence.value() + this.traits.Size.value() + this.traits.Speed.value() - this.traits.Prowess.value();
+	return this.intelligence() + this.size() + this.traits.Speed.value() - this.traits.Prowess.value();
 }
 
 // determines how much energy this creature is worth, if eaten
 Creature.prototype.energyValue = function() {
-	return this.traits.Size.value() * 2;
+	return this.size() * 2;
 }
 
 // the energy used is a function of the creature's size, intelligence, speed, prowess and if they have bred, their fertility
 Creature.prototype.energyUsed = function() {
-	return this.traits.Size.value() + this.traits.Intelligence.value() + this.traits.Speed.value() + Math.floor(Math.sqrt(this.traits.Prowess.value()));
+	return this.size() + this.intelligence() + this.traits.Speed.value() + Math.floor(Math.sqrt(this.traits.Prowess.value()));
 }
 
 // the normalized mean the creature should live, given a longevity and adequate health
@@ -210,7 +232,7 @@ Creature.prototype.fertilityAge = function() {
 // the maximium amount of energy the creature can store before becoming full
 // this is a function of size and intelligence
 Creature.prototype.maxEnergy = function () {
-	return this.traits.Size.value() + this.traits.Intelligence.value();
+	return this.energyUsed() * Math.log(this.intelligence() + 2);
 }
 
 Creature.prototype.litterSize = function () {
@@ -219,6 +241,14 @@ Creature.prototype.litterSize = function () {
 
 Creature.prototype.prowess = function () {
 	return this.traits.Prowess.value();
+}
+
+Creature.prototype.intelligence = function () {
+	return this.traits.Intelligence.value();
+}
+
+Creature.prototype.size = function () {
+	return this.traits.Size.value()
 }
 
 module.exports = Creature;

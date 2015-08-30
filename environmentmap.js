@@ -63,7 +63,7 @@ EnvironmentMap.prototype.makeInvisible = function(id) {
 EnvironmentMap.prototype.locate = function(id) {
 	if(this.positions[id]) {
 		return {"x" : this.positions[id].x, "y" : this.positions[id].y}
-		}
+	}
 }
 
 EnvironmentMap.prototype.list = function() {
