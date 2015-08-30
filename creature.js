@@ -109,8 +109,8 @@ Creature.prototype.fertilize = function(male, energy) {
 
 Creature.prototype.createAncestry = function (male) {
 	var ancestry = []
-	ancestry.concat(male.ancestry);
-	ancestry.concat(this.ancestry);
+	ancestry = ancestry.concat(male.ancestry);
+	ancestry = ancestry.concat(this.ancestry);
 	
 	// prune off the oldest possible ancestor to allow for speciation
 	_.remove(ancestry, function(ancestor) {
@@ -118,7 +118,7 @@ Creature.prototype.createAncestry = function (male) {
 	});
 	
 	// add a generation to the family tree
-	ancestry = _(ancestry).forEach(function(ancestor) {
+	_.forEach(ancestry, function(ancestor) {
 		ancestor.generation++;
 	});
 	

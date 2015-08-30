@@ -31,7 +31,11 @@ EnvironmentMap.prototype.rangeAdd = function(id, data, x, y, squareRadius) {
 }
 
 EnvironmentMap.prototype.get = function(x, y) {
-	return this.positions[this.grid[x][y]].data;
+	var retVal = [], positions = this.positions;
+	_.forEach(this.grid[x][y], function(id) {
+		retVal.push(positions[id].data);
+	});
+	return retVal;
 }
 
 EnvironmentMap.prototype.setPosition = function(id, x, y) {
