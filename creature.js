@@ -64,6 +64,8 @@ var Creature = function(sex, alleleValues, ancestry, startingEnergy) {
 	this.sex = sex;
 	this.id = uuid();
 	this.ancestry = ancestry;
+	this.age = 0;
+	this.dead = false;
 	
 	if(!startingEnergy) {
 		throw "Can't birth a creature with no energy";
@@ -78,9 +80,7 @@ var Creature = function(sex, alleleValues, ancestry, startingEnergy) {
 		throw "Invalid energy";
 	}
 	
-	this.age = 0;
 	this.naturalDeathAge = Math.round(rand.rnorm(this.expectedLifespan(), Math.round(this.expectedLifespan() * .3)));
-	this.dead = false;
 }
 
 // ACTIONS
@@ -193,20 +193,10 @@ Creature.prototype.breedingRange = function() {
 	}
 }
 
-Creature.prototype.nutritionRange = function() {
-	return this.traits.Nutrition.range();
-}
-
-// returns a function of speed that will be the distance the creature can travel
-// during the turn for migration, hunting or breeding purposes
-Creature.prototype.range = function() {
-	return Math.floor(Math.sqrt(this.traits.Speed.value()));
-}
-
 // returns a value that is the combination of speed, intelligence, size and prowess
 // that determines how able one creature is to eat another 
 Creature.prototype.predationScore = function() {
-	return this.intelligence() + this.size() + this.traits.Speed.value() - this.traits.Prowess.value();
+	return this.intelligence() + this.size() + this.range() - this.prowess();
 }
 
 // determines how much energy this creature is worth, if eaten
@@ -216,12 +206,19 @@ Creature.prototype.energyValue = function() {
 
 // the energy used is a function of the creature's size, intelligence, speed, prowess and if they have bred, their fertility
 Creature.prototype.energyUsed = function() {
-	return this.size() + this.intelligence() + this.traits.Speed.value() + Math.floor(Math.sqrt(this.traits.Prowess.value()));
+	return this.size() + this.intelligence() + this.range() + Math.floor(Math.sqrt(this.prowess()));
 }
 
 // the normalized mean the creature should live, given a longevity and adequate health
 Creature.prototype.expectedLifespan = function () {
 	return Math.log(this.traits.Longevity.value() + 2) * 10;
+}
+
+// returns a function of speed that will be the distance the creature can travel
+// during the turn for migration, hunting or breeding purposes
+Creature.prototype.range = function() {
+	var cappedSpeed = Math.min(this.traits.Speed.value(), this.size())
+	return Math.floor(Math.sqrt(cappedSpeed));
 }
 
 // the age a creature can first engage in breeding, which is a function of longevity
@@ -239,16 +236,24 @@ Creature.prototype.litterSize = function () {
 	return this.traits.Fertility.value()
 }
 
+Creature.prototype.nutritionRange = function() {
+	return this.traits.Nutrition.range();
+}
+
 Creature.prototype.prowess = function () {
 	return this.traits.Prowess.value();
 }
 
 Creature.prototype.intelligence = function () {
-	return this.traits.Intelligence.value();
+	return Math.min(this.traits.Intelligence.value(), this.traits.Longevity.value()) * this.youthFactor();
 }
 
 Creature.prototype.size = function () {
-	return this.traits.Size.value()
+	return Math.min(this.traits.Size.value(), this.traits.Longevity.value())  * this.youthFactor();
+}
+
+Creature.prototype.youthFactor = function() {
+	return Math.min(1, (this.age + 1) / this.fertilityAge())
 }
 
 module.exports = Creature;

@@ -21,7 +21,7 @@ Courtship.prototype.procreate = function() {
 		var retVal = [];
 		var excessEnergy = this.female.energy - this.female.energyUsed();
 		
-		if(excessEnergy > 0) {
+		if(excessEnergy > 0 && this.female.litterSize() > 0) {
 			var litterSize = Math.min(this.female.litterSize(), excessEnergy)
 			var startingEnergy = Math.floor(excessEnergy / litterSize);
 		
