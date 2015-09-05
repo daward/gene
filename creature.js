@@ -54,7 +54,7 @@ var Lifecycle = require('./lifecycle.js');
 // Limitation: Speed cannot exceed size
 
 
-var Creature = function(sex, alleleValues, ancestry, startingEnergy) {
+var Creature = function(sex, alleleValues, ancestry, startingEnergy, markers) {
 	
 	this.traits = _.mapValues(alleleValues, function(alleleValue) { 
 		return new Trait(_.mapValues(alleleValue, function(value) {
@@ -66,6 +66,7 @@ var Creature = function(sex, alleleValues, ancestry, startingEnergy) {
 	this.ancestry = ancestry;
 	this.age = 0;
 	this.dead = false;
+	this.markers = markers || [];
 	
 	if(!startingEnergy) {
 		throw "Can't birth a creature with no energy";
@@ -81,6 +82,10 @@ var Creature = function(sex, alleleValues, ancestry, startingEnergy) {
 	}
 	
 	this.naturalDeathAge = Math.round(rand.rnorm(this.expectedLifespan(), Math.round(this.expectedLifespan() * .3)));
+}
+
+Creature.prototype.isMarked = function(markers) {
+	return _.intersection(this.markers, markers).length > 0;
 }
 
 // ACTIONS
@@ -126,7 +131,7 @@ Creature.prototype.fertilize = function(male, energy) {
 		}
 	});
 	
-	return new Creature(maleChromosome, zygote, this.createAncestry(male), energy);
+	return new Creature(maleChromosome, zygote, this.createAncestry(male), energy, _.union(this.markers, male.markers));
 }
 
 Creature.prototype.createAncestry = function (male) {

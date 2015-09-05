@@ -9,6 +9,17 @@ var Year = require('./year.js');
 // sweet, I get to write a god class and not feel guilty!
 var God = function () {
 	this.environment = new Environment();
+	this.maxEnergy = 10;
+	this.maxSize = 10;
+	this.maxGrowthRate = 1;
+	this.minGrowthRate = .3;
+	this.minNutrition = 1;
+	this.maxNutrition = 10;
+	this.minSizeMultiplier = 3;
+	this.maxSizeMultiplier = 6
+	this.maxBreedingPairsPerColony = 10;
+	this.minColonies = 15;
+	this.maxColonies = 30;
 }
 
 God.prototype.letThereBePlants = function() {
@@ -16,11 +27,11 @@ God.prototype.letThereBePlants = function() {
 		for(var y = 0; y < settings.dimensions.length; y++) {
 			var vegetation = new Vegetation(
 				Math.random(),
-				_.random(.3, 1),
-				_.random(1, 5),
-				_.random(0, 10),
-				_.random(0, 10),
-				_.random(3, 6));
+				_.random(this.minGrowthRat, this.maxGrowthRate),
+				_.random(this.minNutrition, this.maxNutrition),
+				_.random(0, this.maxEnergy),
+				_.random(0, this.maxSize),
+				_.random(this.minSizeMultiplier, this.maxSizeMultiplier));
 				
 			this.environment.plant(vegetation, x, y);
 		}
@@ -40,9 +51,9 @@ God.prototype.observeTheWorldIHaveCreated = function () {
 }
 
 God.prototype.createTheWorld = function() {
-	var creatureTypes = _.random(10, 20);
+	var colonies = _.random(this.minColonies, this.maxColonies);
 	
-	for(var i = 0; i < creatureTypes; i++) {
+	for(var i = 0; i < colonies; i++) {
 		this.letThereBeCreatures();
 	}
 	this.letThereBePlants();
@@ -54,7 +65,7 @@ God.prototype.letThereBeCreatures = function() {
 		creatures = [],
 		x = _.random(0, settings.dimensions.width - 1),
 		y = _.random(0, settings.dimensions.length - 1),
-		quant = _.random(0, 8);
+		quant = _.random(0, (this.maxBreedingPairsPerColony - 1) * 2);
 		
 	
 	creatures.push(new Creature(0, genome, [ {"generation" : 0, "id" :godId} ], _.random(5, 10)));

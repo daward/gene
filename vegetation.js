@@ -12,8 +12,7 @@ var Vegetation = function(growthRate, minGrowth, nutrition, energyValue, size, m
 	this.maxSize = maxSizeMultiplier * size;
 }
 
-Vegetation.prototype.grow = function() {
-	
+Vegetation.prototype.grow = function() {	
 	this.size = Math.min(this.maxSize, this.size + Math.max(this.size * this.growthRate, this.minGrowth));
 }
 
