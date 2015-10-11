@@ -97,7 +97,6 @@ exports['test herbivore'] = function (test) {
 		creatures[0].predationScore = function() { return 0; }
 		creatures[0].nutritionRange = function() { return [4, 4]; }
 		
-		
 		var energy = creatures[0].energy;
 		
 		var size = vegetation.size;
@@ -105,7 +104,7 @@ exports['test herbivore'] = function (test) {
 		
 		test.equals(1, shiva.environment.getAllCreatures().length)
 		test.equals(false, creatures[0].isDead());
-		test.ok(energy + vegetation.energyValue() === creatures[0].energy);
+		test.equals( Math.min(energy + vegetation.energyValue(), creatures[0].maxEnergy()) , creatures[0].energy);
 		test.equals((size - 1) * (1 + vegetation.growthRate), vegetation.size);
 	});
 	test.done();
@@ -127,7 +126,7 @@ exports['test multi herbivore'] = function (test) {
 		
 		test.equals(2, shiva.environment.getAllCreatures().length)
 		test.equals(false, creatures[0].isDead());
-		test.ok(energy + vegetation.energyValue() === creatures[0].energy);
+		test.equals( Math.min(energy + vegetation.energyValue(), creatures[0].maxEnergy()) , creatures[0].energy);
 		test.equals((size - 2) * (1 + vegetation.growthRate), vegetation.size);
 	});
 	test.done();

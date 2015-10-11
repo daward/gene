@@ -23,12 +23,20 @@ var God = function () {
 }
 
 God.prototype.letThereBePlants = function() {
+	var nutridiff = (this.maxNutrition - this.minNutrition) 
+	var equator = settings.dimensions.length / 2
 	for(var x = 0; x < settings.dimensions.width; x++) {
 		for(var y = 0; y < settings.dimensions.length; y++) {
+			
+			var inverselatitude = equator - Math.abs(y - equator);
+			
+			var maxlatitudePct = Math.min(equator, (inverselatitude + 5)) / equator;
+			var minlatitudePct = Math.max(0, (inverselatitude - 5)) / equator;
+			
 			var vegetation = new Vegetation(
 				Math.random(),
-				_.random(this.minGrowthRat, this.maxGrowthRate),
-				_.random(this.minNutrition, this.maxNutrition),
+				_.random(this.minGrowthRate, this.maxGrowthRate),
+				_.random(nutridiff * minlatitudePct + this.minNutrition, nutridiff * maxlatitudePct + this.minNutrition),
 				_.random(0, this.maxEnergy),
 				_.random(0, this.maxSize),
 				_.random(this.minSizeMultiplier, this.maxSizeMultiplier));
